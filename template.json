@@ -34,7 +34,17 @@
                         },
                         "caching": "ReadWrite"
                     },
-                    "dataDisks": []
+                    "dataDisks": [
+					{
+						"name": "jenkins-dd",
+						"lun": 1,
+						"vhd": {
+							"uri": "https://vhdgrpstandard.blob.core.windows.net/blob-private/azdv-grp-jenms1_data-01.vhd"
+						},
+						"caching": "ReadWrite",
+						"createOption": "attach"
+					}
+				  ]
                 },
                 "osProfile": {
                     "computerName": "azdv-grp-jenms1",
