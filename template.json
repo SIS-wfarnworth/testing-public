@@ -1,0 +1,475 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Jenkins Swarm - Master server",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "azdv-grp-jenms1",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "tags": {
+                "Application": "JENKS",
+                "Service": "GRP",
+                "Environment": "Dev",
+                "Scope": "Unique"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "RedHat",
+                        "offer": "RHEL",
+                        "sku": "6.7",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "azdv-grp-jenms1-os-01",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https://vhdgrppremium.blob.core.windows.net/vhds/', 'azdv-grp-jenms1','-os-01.vhd')]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "azdv-grp-jenms1",
+                    "adminUsername": "deploy",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/deploy/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA1Wuj1lRvY27asWg1pl3Rjg0EFJ6HTdQO264QqISqlgMHLscyxaq3sGEKXYSj1sgh4ne6tbDkJkjctBJIRRcrVOa1133Sph9+boOlcDB3dsgxc9XczPBX/TNK+QoSHZ/K4vA3XawmL5zPk9Q5cMdd+zX8LwJhplG3jX8xvHQwPzGAqne1G82nsGB5LkJJRPfnkQviJRI1Kl/4PxZ2GRj4xApZqwAv2XYFsW1xH/Wj9bVyowe94EpYfXoNX//XYogSy+px2u7heB8vn79tfEOJFycqTO7bVs4Vlz/MxOkBTkhqc3Qu580V789T+Vq/UUW907u4bXarAMvBpISTfECzWw=="
+                                }
+                            ]
+                        }
+                    },
+                    "secrets": [],
+                    "adminPassword": null
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')]"
+                        }
+                    ]
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')]"
+            ]
+        },
+        {
+            "comments": "Jenkins Swarm - Slave node",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "azdv-grp-jensl1",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "tags": {
+                "Application": "JENKS",
+                "Service": "GRP",
+                "Scope": "Unique",
+                "Environment": "Dev",
+                "AutoShutdownSchedule": "17:00 -> 9:00, Saturday, Sunday"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_F16s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "RedHat",
+                        "offer": "RHEL",
+                        "sku": "6.7",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "azdv-grp-jensl1-os-01",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https://vhdgrppremium.blob.core.windows.net/vhds/', 'azdv-grp-jensl1','-os-01.vhd')]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "azdv-grp-jensl1",
+                    "adminUsername": "deploy",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/deploy/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA1Wuj1lRvY27asWg1pl3Rjg0EFJ6HTdQO264QqISqlgMHLscyxaq3sGEKXYSj1sgh4ne6tbDkJkjctBJIRRcrVOa1133Sph9+boOlcDB3dsgxc9XczPBX/TNK+QoSHZ/K4vA3XawmL5zPk9Q5cMdd+zX8LwJhplG3jX8xvHQwPzGAqne1G82nsGB5LkJJRPfnkQviJRI1Kl/4PxZ2GRj4xApZqwAv2XYFsW1xH/Wj9bVyowe94EpYfXoNX//XYogSy+px2u7heB8vn79tfEOJFycqTO7bVs4Vlz/MxOkBTkhqc3Qu580V789T+Vq/UUW907u4bXarAMvBpISTfECzWw=="
+                                }
+                            ]
+                        }
+                    },
+                    "secrets": [],
+                    "adminPassword": null
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')]"
+                        }
+                    ]
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')]"
+            ]
+        },
+        {
+            "comments": "Jenkins Swarm - Master server NIC",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "azdv-grp-jenms1-nic-01",
+            "apiVersion": "2016-03-30",
+            "location": "northeurope",
+            "tags": {
+                "Service": "GRP",
+                "Application": "JENKS",
+                "Environment": "Dev",
+                "Scope": "Unique"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "azdv-grp-jenms1-nic-01-ipconfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "/subscriptions/b4bd880f-0f62-4732-98c3-ac150fb5d098/resourceGroups/rg-DevelopmentServices-dev-global/providers/Microsoft.Network/virtualNetworks/vn-DevelopmentServices-dev/subnets/sn-DevelopmentServices-dev-poc"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-jenms-dev')]"
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-jenms-dev')]"
+            ]
+        },
+        {
+            "comments": "Jenkins Swarm - Slave NIC",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "azdv-grp-jensl-nic-01",
+            "apiVersion": "2016-03-30",
+            "location": "northeurope",
+            "tags": {
+                "Service": "GRP",
+                "Application": "JENKS",
+                "Environment": "Dev",
+                "Scope": "Unique"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "azdv-grp-jensl1-nic-01-ipconfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "/subscriptions/b4bd880f-0f62-4732-98c3-ac150fb5d098/resourceGroups/rg-DevelopmentServices-dev-global/providers/Microsoft.Network/virtualNetworks/vn-DevelopmentServices-dev/subnets/sn-DevelopmentServices-dev-poc"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-jenms-dev')]"
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-jenms-dev')]"
+            ]
+        },
+        {
+            "comments": "Jenkins Swarm - Master server NSG",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "nsg-jenms-dev",
+            "apiVersion": "2016-03-30",
+            "location": "northeurope",
+            "tags": {
+                "Application": "JENKS",
+                "Service": "GRP",
+                "Scope": "Unique",
+                "Environment": "Dev"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "10.0.0.0/8",
+                            "destinationAddressPrefix": "127.0.0.1",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "10.0.0.0/8",
+                            "destinationAddressPrefix": "127.0.0.1",
+                            "access": "Allow",
+                            "priority": 110,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "DROP-ALL-IN",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 999,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "DROP-ALL-OUT",
+                        "properties": {
+                            "description": "",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 999,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-Dev-Int",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.84.0.0/17",
+                            "access": "Allow",
+                            "priority": 200,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-QA-Int",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.85.0.0/17",
+                            "access": "Allow",
+                            "priority": 220,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-QA-DMZ",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.85.128.0/17",
+                            "access": "Allow",
+                            "priority": 230,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-UAT-Int",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.86.0.0/17",
+                            "access": "Allow",
+                            "priority": 240,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-Dev-DMZ",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.84.128.0/17",
+                            "access": "Allow",
+                            "priority": 210,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-UAT-DMZ",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.86.128.0/17",
+                            "access": "Allow",
+                            "priority": 250,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-Prod-Int",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.87.0.0/17",
+                            "access": "Allow",
+                            "priority": 260,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Tomcat-Deploy-Prod-DMZ",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "127.0.0.1",
+                            "destinationAddressPrefix": "10.87.128.0/17",
+                            "access": "Allow",
+                            "priority": 270,
+                            "direction": "Outbound"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Jenkins Swarm - Jenkins slave node NSG",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "nsg-jensl-dev",
+            "apiVersion": "2016-03-30",
+            "location": "northeurope",
+            "tags": {
+                "Scope": "Unique",
+                "Environment": "Dev",
+                "Service": "GRP",
+                "Application": "JENKS"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "10.0.0.0/8",
+                            "destinationAddressPrefix": "127.0.0.1",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "DROP-ALL-IN",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 999,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Jenkins-Swarm",
+                        "properties": {
+                            "description": "",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "10.83.0.0/17",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "DROP-ALL-OUT",
+                        "properties": {
+                            "description": "",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 999,
+                            "direction": "Outbound"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        }
+    ],
+	    "outputs": {
+        "azdv-grp-jenms1": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+        },
+	        "azdv-grp-jensl1": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+        }
+    }
+}
