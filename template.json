@@ -130,14 +130,14 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')]"
                         }
                     ]
                 }
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')]"
+                "[resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')]"
             ]
         },
         {
@@ -180,7 +180,7 @@
         {
             "comments": "Jenkins Swarm - Slave NIC",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "azdv-grp-jensl-nic-01",
+            "name": "azdv-grp-jensl1-nic-01",
             "apiVersion": "2016-03-30",
             "location": "northeurope",
             "tags": {
@@ -474,12 +474,30 @@
     ],
 	    "outputs": {
         "azdv-grp-jenms1": {
-            "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+			"type": "object",
+			"value": {
+				"ipaddress": {
+					"type": "string",
+					"value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+				},
+				"groups" : {
+					"type": "string",
+					"value": "jenks,jenms,dev"
+			}
+			}
         },
-	        "azdv-grp-jensl1": {
-            "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
-        }
+        "azdv-grp-jensl1": {
+			"type": "object",
+			"value": {
+				"ipaddress": {
+					"type": "string",
+					"value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+				},
+				"groups" : {
+					"type": "string",
+					"value": "jenks,jensl,dev"
+			}
+			}
+        }		
     }
 }
