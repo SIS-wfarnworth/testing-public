@@ -485,19 +485,6 @@
 					"value": "jenks,jenms,dev"
 			}
 			}
-        },
-        "azdv-grp-jensl1": {
-			"type": "object",
-			"value": {
-				"ipaddress": {
-					"type": "string",
-					"value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
-				},
-				"groups" : {
-					"type": "string",
-					"value": "jenks,jensl,dev"
-			}
-			}
-        }		
+        },		
     }
 }
