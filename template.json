@@ -476,28 +476,17 @@
         "azdv-grp-jenms1": {
 			"type": "object",
 			"value": {
-				"ipaddress": {
-					"type": "string",
-					"value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
+				"host0": {
+					"name": "azdv-grp-jenms1",
+					"ipaddress": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]",
+					"groups": "jenks,jenms,dev"
 				},
-				"groups" : {
-					"type": "string",
-					"value": "jenks,jenms,dev"
+				"host1" : {
+					"name": "azdv-grp-jensl1",
+					"ipaddress": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')).ipConfigurations[0].properties.privateIPAddress]",
+					"groups": "jenks,jensl,dev"
+				}
 			}
-			}
-        },
-        "azdv-grp-jensl1": {
-			"type": "object",
-			"value": {
-				"ipaddress": {
-					"type": "string",
-					"value": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')).ipConfigurations[0].properties.privateIPAddress]"
-				},
-				"groups" : {
-					"type": "string",
-					"value": "jenks,jensl,dev"
-			}
-			}
-        }		
+        }	
     }
 }
