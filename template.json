@@ -477,14 +477,22 @@
 				"type": "object",
 				"value": {
 						"ipaddress": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jenms1-nic-01')).ipConfigurations[0].properties.privateIPAddress]",
-						"groups": "jenks,jenms,dev"
+						"groups": [
+							{"name": "jenks"},
+							{"name": "jenms"},
+							{"name": "dev"} 
+						]
 				}
 			},
 			"azdv-grp-jensl1": {
 				"type": "object",
 				"value": {
 						"ipaddress": "[reference(resourceId('Microsoft.Network/networkInterfaces', 'azdv-grp-jensl1-nic-01')).ipConfigurations[0].properties.privateIPAddress]",
-						"groups": "jenks,jensl,dev"
+						"groups": [
+							{"name": "jenks"},
+							{"name": "jensl"},
+							{"name": "dev"} 
+						]
 				}
 			}
 		}
